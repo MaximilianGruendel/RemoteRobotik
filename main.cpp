@@ -9,8 +9,9 @@ Rect getRectangle(int pI){
 
     //X-& Y-Koordinate, sowie Breite & Höhe der Rechteckausschnitte
     Rect tmp[] = {
-                    Rect(130, 850, 140, 150),
-                    Rect(300, 850, 150, 150),
+                    //Rect(130, 850, 140, 150),
+                    //Rect(300, 850, 150, 150),
+                    Rect(250, 750, 250, 250),
                  };
     return tmp[pI];
 
@@ -18,11 +19,24 @@ Rect getRectangle(int pI){
 
 int getAngle(){
 
-    // Lade ein Bild aus Verzeichnis
-    Mat image = imread("./example_1.jpg", IMREAD_GRAYSCALE);
+    Mat image, gray, binary;
 
-    // Bild mit Kamera aufnehmen #ID für die Kamera
-    //VideoCapture cap(0);
+    /**
+    // Bild mit Kamera aufnehmen
+    //Mat image = getImageCam();
+
+    VideoCapture cap(0);
+
+    if (!cap.isOpened()) {
+        cout << "cannot open camera";
+    }
+
+    while (true) {
+        cap >> image;
+        if(waitKey(10) >= 0){
+            break;
+        }
+    }
 
     // Überprüfen Sie, ob das Bild geladen wurde
     if (image.empty()) {
@@ -30,9 +44,17 @@ int getAngle(){
         return -1;
     }
 
+    //Wandle das Bild in ein Graubild um
+    cvtColor(image, gray, COLOR_BGR2GRAY);
+    */
+
+    // Lade ein Bild aus Verzeichnis
+    image = imread("./example_2.jpg");
+    cvtColor(image, gray, COLOR_RGB2GRAY);
+
+
     // Wandle das Bild in ein Binärbild um
-    Mat binary;
-    threshold(image, binary, 100, 255, THRESH_BINARY);
+    threshold(gray, binary, 100, 255, THRESH_BINARY);
 
     // Array für die Ausschnitte
     Mat rec_image[2];
@@ -44,7 +66,7 @@ int getAngle(){
 
         // Finde Linien im Binärbild
         vector<Vec2f> lines;
-        HoughLines(rec_image[j], lines, 1, CV_PI/180, 200);
+        HoughLines(rec_image[j], lines, 20, CV_PI/180, 75);
 
         // Zeichne die Linien auf das Ursprungsbild
         Mat result = rec_image[j].clone();
@@ -64,7 +86,7 @@ int getAngle(){
         for(size_t i = 0; i < lines.size(); i++) {
             float theta = lines[i][1];
             int angle = theta * 180 / CV_PI;
-            cout << "Linie " << i << ": Winkel = " << angle << " Grad" << endl;
+            cout << "Servo "<< j << "| Linie " << i << ": Winkel = " << angle << " Grad" << endl;
         }
         // Zeige das Ergebnisbild an
         imshow("Ausschnitt", rec_image[j]);
@@ -73,8 +95,13 @@ int getAngle(){
 
     }
 
-    //imshow("Ursprungsbild", image);
-    //imshow("Binär", binary);
+    /**
+    namedWindow("Ursprungsbild",CV_WINDOW_AUTOSIZE);
+    namedWindow("Binär",CV_WINDOW_AUTOSIZE);
+    imshow("Ursprungsbild", image);
+    imshow("Binär", binary);
+    waitKey(0);
+    */
 
 }
 
