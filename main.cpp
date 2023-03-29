@@ -13,9 +13,30 @@ X-& Y-Koordinate, sowie Breite & Höhe
 Rect getRectangle(int pI){
 
     Rect tmp[] = {
-                    Rect(880, 130, 100, 100),
-                    Rect(880, 240, 100, 100),
-                    Rect(640, 220, 110, 110),
+                    Rect(820, 140, 110, 110),   //Servo 0
+                    Rect(825, 250, 110, 110),   //Servo 1
+                    Rect(825, 370, 110, 110),   //Servo 2
+                    Rect(820, 490, 110, 110),   //Servo 3
+                    Rect(700, 120, 130, 110),   //Servo 4
+                    Rect(710, 245, 130, 110),   //Servo 5
+                    Rect(710, 375, 130, 110),   //Servo 6
+                    Rect(700, 500, 130, 110),   //Servo 7
+                    Rect(580, 110, 130, 110),   //Servo 8
+                    Rect(580, 240, 130, 110),   //Servo 9
+                    Rect(580, 380, 130, 110),   //Servo 10
+                    Rect(580, 510, 130, 110),   //Servo 11
+                    Rect(445, 110, 130, 110),   //Servo 12
+                    Rect(445, 240, 130, 110),   //Servo 13
+                    Rect(445, 380, 130, 110),   //Servo 14
+                    Rect(445, 510, 130, 110),   //Servo 15
+                    Rect(320, 120, 130, 110),   //Servo 16
+                    Rect(320, 245, 130, 110),   //Servo 17
+                    Rect(320, 375, 130, 110),   //Servo 18
+                    Rect(320, 500, 130, 110),   //Servo 19
+                    Rect(220, 130, 110, 110),   //Servo 20
+                    Rect(220, 250, 110, 110),   //Servo 21
+                    Rect(220, 375, 110, 110),   //Servo 22
+                    Rect(220, 490, 110, 110),   //Servo 23
                  };
     return tmp[pI];
 
@@ -66,32 +87,39 @@ Point getCenter(Mat binary){
 Point* getPoints(Mat binary){
 
     Point center = getCenter(binary);
-    cout << "Center: " << center.x << " | " << center.y << endl;
+    //cout << "Center: " << center.x << " | " << center.y << endl;
 
+    /**
     //Ausgabe des Schwerpunktes
     Mat c;
     cvtColor(binary, c, COLOR_GRAY2BGR);
 
     circle(c, center, 5, Scalar(0, 255, 0), -1);
+
     Point a, b;
-    a.x = center.x - 25;
-    a.y = center.x - 25;
-    b.x = center.y + 25;
-    b.y = center.y + 25;
+    a.x = center.x - correction;
+    a.y = center.y - correction;
+    b.x = center.x + correction;
+    b.y = center.y + correction;
 
     rectangle(c, a, b, Scalar(255, 0, 0), 2);
-
-    imshow("Result", c);
-    waitKey(0);
-
+    */
 
     int correction = 25;
     Point pt1, pt2;
 
-    int col1 = center.x - correction;
-    int col2 = center.x + correction;
-    int row1 = center.y - correction;
-    int row2 = center.y + correction;
+    int col1 = center.y - correction;
+    int col2 = center.y + correction;
+    int row1 = center.x - correction;
+    int row2 = center.x + correction;
+
+    /**
+    cout << "col1: " << col1 << endl;
+    cout << "col2: " << col2 << endl;
+    cout << "row1: " << row1 << endl;
+    cout << "row2: " << row2 << endl;
+    */
+
 
     if(getMedium(binary.row(col1), 1) > 0){
         pt1.x = getMedium(binary.row(col1), 1);
@@ -99,14 +127,22 @@ Point* getPoints(Mat binary){
         pt2.x = getMedium(binary.row(col2), 1);
         pt2.y = col2;
     } else {
-        pt1.x = getMedium(binary.col(row1), 2);
-        pt1.y = row1;
-        pt2.x = getMedium(binary.row(row2), 2);
-        pt2.y = row2;
+        pt2.y = getMedium(binary.col(row1), 2);
+        pt2.x = row1;
+        pt1.y = getMedium(binary.col(row2), 2);
+        pt1.x = row2;
     }
+
+    /**
+    circle(c, pt1, 5, Scalar(0, 255, 0), -1);
+    circle(c, pt2, 5, Scalar(0, 255, 0), -1);
+
+    imshow("Result", c);
+    waitKey(0);
 
     cout << "---Punkt_1: " << pt1.x << " | " << pt1.y << endl;
     cout << "---Punkt_2: " << pt2.x << " | " << pt2.y << endl;
+    */
 
     static Point points[2];
 
@@ -149,7 +185,7 @@ string angle(){
     */
 
 
-    Mat image = imread("./hellBeleuchtung.jpg");
+    Mat image = imread("./test_2.jpg");
     Mat channels[3];
 
     split(image, channels);
@@ -175,20 +211,33 @@ string angle(){
 
     string answer = "";
 
-    for(int i = 0; i < 3; i++){
+    for(int i = 0; i < 24; i++){
         binary = complete_binary(getRectangle(i));
+        /**
         imshow("Test", binary);
         waitKey(0);
+        */
 
         points = getPoints(binary);
 
+        /**
+        cout << i << endl;
         cout << "Punkt 1: " << points[0].x << " | " << points[0].y << endl;
         cout << "Punkt 2: " << points[1].x << " | " << points[1].y << endl;
+        */
 
         double m = atan2(points[1].y - points[0].y, points[1].x - points[0].x);
         // Umrechnung in Grad
-        double angle = m * 180 / CV_PI;
+        int angle = m * 180 / CV_PI;
 
+        if(angle < 0){
+            angle = angle + 180;
+        }
+        if(angle > 90){
+            angle = angle - 180;
+        }
+
+        /**
         cout << angle << endl;
 
         Mat result;
@@ -197,8 +246,10 @@ string angle(){
 
         imshow("Binary", result);
         waitKey(0);
+        */
 
-        answer = answer + "Servo " + to_String(i) + ": " + to_string(angle) + "DEG\n";
+        answer = answer + "Servo " + to_string(i) + ": " + to_string(angle) + " DEG\n";
+
     }
 
     return answer;
@@ -206,7 +257,7 @@ string angle(){
 
 int main(int argc, char** argv) {
 
-    string tmp = angleTest();
+    string tmp = angle();
 
     cout << tmp << endl;
 
