@@ -15,6 +15,8 @@ find_package(catkin REQUIRED COMPONENTS
   message_generation
 )
 
+find_package(OpenCV REQUIRED)
+
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
 
@@ -118,7 +120,7 @@ catkin_package(
 ## Your package locations should be listed before other locations
 include_directories(
 # include
-  ${catkin_INCLUDE_DIRS}
+  angle_server ${catkin_INCLUDE_DIRS}
 )
 
 ## Declare a C++ library
@@ -208,6 +210,7 @@ include_directories(
 
 add_executable(angle_server src/angle_server.cpp)
 target_link_libraries(angle_server ${catkin_LIBRARIES})
+target_link_libraries(angle_server ${OpenCV_LIBRARIES})
 add_dependencies(angle_server angle_detector_gencpp)
 
 add_executable(angle_client src/angle_client.cpp)
