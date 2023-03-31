@@ -13,30 +13,30 @@ X-& Y-Koordinate, sowie Breite & Höhe
 Rect getRectangle(int pI){
 
     Rect tmp[] = {
-                    Rect(820, 140, 110, 110),   //Servo 0
-                    Rect(825, 250, 110, 110),   //Servo 1
-                    Rect(825, 370, 110, 110),   //Servo 2
-                    Rect(820, 490, 110, 110),   //Servo 3
-                    Rect(700, 120, 130, 110),   //Servo 4
-                    Rect(710, 245, 130, 110),   //Servo 5
-                    Rect(710, 375, 130, 110),   //Servo 6
-                    Rect(700, 500, 130, 110),   //Servo 7
-                    Rect(580, 110, 130, 110),   //Servo 8
-                    Rect(580, 240, 130, 110),   //Servo 9
-                    Rect(580, 380, 130, 110),   //Servo 10
-                    Rect(580, 510, 130, 110),   //Servo 11
-                    Rect(445, 110, 130, 110),   //Servo 12
-                    Rect(445, 240, 130, 110),   //Servo 13
-                    Rect(445, 380, 130, 110),   //Servo 14
-                    Rect(445, 510, 130, 110),   //Servo 15
-                    Rect(320, 120, 130, 110),   //Servo 16
-                    Rect(320, 245, 130, 110),   //Servo 17
-                    Rect(320, 375, 130, 110),   //Servo 18
-                    Rect(320, 500, 130, 110),   //Servo 19
-                    Rect(220, 130, 110, 110),   //Servo 20
-                    Rect(220, 250, 110, 110),   //Servo 21
-                    Rect(220, 375, 110, 110),   //Servo 22
-                    Rect(220, 490, 110, 110),   //Servo 23
+                    Rect(840, 125, 120, 120),   //Servo 0
+                    Rect(850, 240, 120, 120),   //Servo 1
+                    Rect(850, 365, 120, 120),   //Servo 2
+                    Rect(840, 480, 120, 120),   //Servo 3
+                    Rect(735, 120, 120, 120),   //Servo 4
+                    Rect(735, 245, 120, 120),   //Servo 5
+                    Rect(735, 375, 120, 120),   //Servo 6
+                    Rect(735, 500, 120, 120),   //Servo 7
+                    Rect(615, 115, 120, 120),   //Servo 8
+                    Rect(615, 245, 120, 120),   //Servo 9
+                    Rect(615, 375, 120, 120),   //Servo 10
+                    Rect(615, 510, 120, 120),   //Servo 11
+                    Rect(480, 115, 120, 120),   //Servo 12
+                    Rect(480, 245, 120, 120),   //Servo 13
+                    Rect(480, 375, 120, 120),   //Servo 14
+                    Rect(480, 510, 120, 120),   //Servo 15
+                    Rect(345, 120, 120, 120),   //Servo 16
+                    Rect(345, 245, 120, 120),   //Servo 17
+                    Rect(345, 375, 120, 120),   //Servo 18
+                    Rect(350, 500, 120, 120),   //Servo 19
+                    Rect(235, 130, 120, 120),   //Servo 20
+                    Rect(235, 250, 120, 120),   //Servo 21
+                    Rect(235, 375, 120, 120),   //Servo 22
+                    Rect(240, 490, 120, 120),   //Servo 23
                  };
     return tmp[pI];
 
@@ -157,7 +157,7 @@ string angle(){
 
     /**
     // Bild mit Kamera aufnehmen
-    Mat image = getImageCam();
+    Mat image;
 
     VideoCapture cap(0);
     cap.set(3, 1280);
@@ -177,15 +177,13 @@ string angle(){
     // Überprüfen Sie, ob das Bild geladen wurde
     if (image.empty()) {
         cout << "Konnte das Bild nicht laden." << endl;
-        return -1;
+        return "Konnte das Bild nicht laden.";
     }
 
-    //Wandle das Bild in ein Graubild um
-    cvtColor(image, gray, COLOR_BGR2GRAY);
     */
 
 
-    Mat image = imread("./test_2.jpg");
+    Mat image = imread("./hell_2.jpg");
     Mat channels[3];
 
     split(image, channels);
@@ -237,16 +235,13 @@ string angle(){
             angle = angle - 180;
         }
 
-        /**
-        cout << angle << endl;
-
         Mat result;
         cvtColor(binary, result, COLOR_GRAY2BGR);
         line(result, points[0], points[1], Scalar(255, 0, 0), 1, LINE_AA);
 
         imshow("Binary", result);
         waitKey(0);
-        */
+
 
         answer = answer + "Servo " + to_string(i) + ": " + to_string(angle) + " DEG\n";
 
